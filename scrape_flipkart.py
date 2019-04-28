@@ -26,42 +26,52 @@ actual_price_class = "_3auQ3N"
 product_image_class = "_3togXc"
 discount_percent_class = "VGWI6T"
 footware_size_class = "o_gtXB"
+main_product_page = "_3dqZjq"
 
-data_1 = soup.find_all("div", {"class":product_name_class})
-data_dis_price_1 = soup.find_all("div", {"class":discount_price_class})
-data_actual_price_1 = soup.find_all("div",{"class":actual_price_class})
+product_name_1 = soup.find_all("div", {"class":product_name_class})
+product_desc_1 = soup.find_all("a",{"class":description_class})
+product_dis_price_1 = soup.find_all("div", {"class":discount_price_class})
+product_actual_price_1 = soup.find_all("div",{"class":actual_price_class})
+discount_percent = soup.find_all("div",{"class":discount_percent_class})
+product_image = soup.find_all("img",{"class": product_image_class})
+size = soup.find_all("div",{"class":footware_size_class})
+main_product_page_1 = soup.find_all("a",{"class":main_product_page})
 
-print(data_1[0].text.strip())
-print(data_dis_price_1[0].text.strip())
-print(data_actual_price_1[0].text.strip())
+print(product_name_1[0].text.strip())
+print(product_desc_1[0].text.strip())
+print(product_dis_price_1[0].text.strip())
+print(product_actual_price_1[0].text.strip())
+print(discount_percent[0].text.strip())
+# print(product_image[0]['src'])
+# print(size[0])
+print("www.flipkart.com"+ main_product_page_1[0]['href'])
 
-print(len(data_1))
+print(len(product_name_1))
 
+# url2 = url + "&page=2" 
+# r = requests.get(url2)
+# soup = BeautifulSoup(r.content,'html.parser')
 
-url2 = url + "&page=2" 
-r = requests.get(url2)
-soup = BeautifulSoup(r.content,'html.parser')
+# product_name_2 = soup.find_all("div", {"class":product_name_class})
+# product_dis_price_2 = soup.find_all("div", {"class":discount_price_class})
+# product_actual_price_2 = soup.find_all("div",{"class":actual_price_class})
 
-data_2 = soup.find_all("div", {"class":product_name_class})
-data_dis_price_2 = soup.find_all("div", {"class":discount_price_class})
-data_actual_price_2 = soup.find_all("div",{"class":actual_price_class})
+# print(product_2[0].text.strip())
+# print(product_dis_price_2[0].text.strip())
+# print(product_actual_price_2[0].text.strip())
 
-print(data_2[0].text.strip())
-print(data_dis_price_2[0].text.strip())
-print(data_actual_price_2[0].text.strip())
+# print(len(product_2))
 
-print(len(data_2))
+# url3 = url + "&page=3" 
+# r = requests.get(url3)
+# soup = BeautifulSoup(r.content,'html.parser')
 
-url3 = url + "&page=3" 
-r = requests.get(url3)
-soup = BeautifulSoup(r.content,'html.parser')
+# product__name_3 = soup.find_all("div", {"class":product_name_class})
+# product_dis_price_3 = soup.find_all("div", {"class":discount_price_class})
+# product_actual_price_3 = soup.find_all("div",{"class":actual_price_class})
 
-data_3 = soup.find_all("div", {"class":product_name_class})
-data_dis_price_3 = soup.find_all("div", {"class":discount_price_class})
-data_actual_price_3 = soup.find_all("div",{"class":actual_price_class})
+# print(product_3[0].text.strip())
+# print(product_dis_price_3[0].text.strip())
+# print(product_actual_price_3[0].text.strip())
 
-print(data_3[0].text.strip())
-print(data_dis_price_3[0].text.strip())
-print(data_actual_price_3[0].text.strip())
-
-print(len(data_3))
+# print(len(product_3))
