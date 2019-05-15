@@ -2,42 +2,60 @@ import pandas as pd
 import numpy as np
 from bs4 import BeautifulSoup
 from urllib.request import urlopen 
-from nltk import clean_html
 import requests
 
-url = "https://www.amazon.in/Casual-Shoes-50-Off-or-more/s?rh=n%3A9780814031%2Cp_n_pct-off-with-tax%3A2665401031"
+headers_std = {
+'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36',
+'Content-Type': 'text/html',
+}
 
-r = requests.get(url)
-# html = urlopen(url)
-# print(html)
-# soup = BeautifulSoup(html,"html.parser")
-# print(type(BeautifulSoup))
+url = "https://www.amazon.in/s?k=stilleto+heels&page=2&qid=1557851935&ref=sr_pg_2"
+html = requests.get(url,headers=headers_std).text
+soup = BeautifulSoup(html,'lxml')
 
-soup = BeautifulSoup(r.content,"html.parser")
+product_name_class = "a-size-base-plus a-color-base a-text-normal"
+discount_price_class = "a-price" 
+actual_price_class = "a-price-whole"
+rating_class = "a-icon-alt"
+no_of_rat_class = 'a-size-base'
+main_page_url_class ="a-link-normal a-text-normal"
 
-title = soup.title
-# print(title.string)
-# print(soup.prettify())
+#scrape the product details
+product_names = soup.find_all("span", {"class":product_name_class})
+product_prices = soup.find_all("span",{"class":actual_price_class})
+ratings = soup.find_all("span",{"class":rating_class})
+no_of_ratings = soup.find_all('span',{'class':no_of_rat_class})
+main_page_urls = soup.find_all("a",{'class': main_page_url_class})
 
-# product_name_class = "a-size-base-plus a-color-base a-text-normal"
-# description_class = "_2mylT6"
-# discount_price_class = "a-price" 
-# actual_price_class = "a-price-whole"
-# product_image_class = "_3togXc"
-# discount_percent_class = "VGWI6T"
-# footware_size_class = "o_gtXB"
-# main_product_page = "_3dqZjq"
-asin_number = ""
+print(product_names[0].text.strip())
+print(product_prices[0].text.strip())
+print(ratings[0].text.strip())
+# print(no_of_ratings[0].content)
+print('amazon.in'+ main_page_urls[0].get('href').strip())
 
-asin_number_list = soup.find_all("div", {"class":"sg-col-4-of-24"})
+print(len(product_names))
+print(len(product_prices))
+print(len(ratings))
+print(len(main_page_urls))
 
-# product_name_1 = soup.find_all("span", {"class":product_name_class})
-# product_desc_1 = soup.find_all("a",{"class":description_class})
-# product_dis_price_1 = soup.find_all("span", {"class":discount_price_class})
-# product_actual_price_1 = soup.find_all("span",{"class":actual_price_class})
-# discount_percent = soup.find_all("div",{"class":discount_percent_class})
-# product_image = soup.find_all("img",{"class": product_image_class})
-# size = soup.find_all("div",{"class":footware_size_class})
-# main_product_page_1 = soup.find_all("a",{"class":main_product_page})
+product_names_df = []
+product_prices_df = []
+ratings_df = []
+main_page_urls_df = []
 
-print(asin_number_list)
+#make a dataframe
+for i in range(len(product_names)):
+
+	product_names_df.append(product_names[i].text.strip())
+	product_prices_df.append(product_prices[i].text.strip())
+	main_page_urls_df.append("amazon.in" + main_page_urls[i].get('href').strip())
+
+	try:
+		ratings_df.append(ratings[i].text.strip())
+	except:
+		ratings_df.append(None)
+
+df = pd.DataFrame({'product_name':product_names_df,'price (INR)':product_prices_df,'rating':ratings_df,'product_page':main_page_urls_df})
+print(df.head())
+
+df.to_csv('amazon_main_page_scraping.csv',index=False)
