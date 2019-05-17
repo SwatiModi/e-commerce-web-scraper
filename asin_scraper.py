@@ -18,6 +18,16 @@ asin_number_list = soup.find_all("div", {"class":"s-result-item"})
 # print(asin_number_list)
 # print(asin_number_list[0])
 
-# for asin in asin_number_list:
-# 	asins = asin.get("data-asin")
-print(asin_number_list[0].get('data-asin'))
+# print(asin_number_list[0].get('data-asin'))
+
+asins = []
+
+# get data-asin for all products and save as a csv
+for i in range(len(asin_number_list)):
+	asins.append(asin_number_list[i].get('data-asin'))
+
+print(len(asins))
+print(asins)
+
+asin_df = pd.DataFrame({'ASIN':asins})
+asin_df.to_csv('ASINs.csv',index=False)
