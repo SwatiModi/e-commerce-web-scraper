@@ -20,11 +20,11 @@ asin_list = asins_df['ASIN']
 # 	html = requests.get(url,headers=headers_std).text
 # 	soup = BeautifulSoup(html,'lxml')
 
-url = "https://www.amazon.in/dp/B014G69R1Q"
-html = requests.get(url,headers=headers_std).text
-soup = BeautifulSoup(html,'lxml')
+# url = "https://www.amazon.in/dp/B014G69R1Q"
+# html = requests.get(url,headers=headers_std).text
+# soup = BeautifulSoup(html,'lxml')
 
-image_list_span_class = 'a-autoid-8-announce' #span containing the img tag
+image_list_span_class = 'a-button-text' #span containing the img tag
 brand_name_class = 'bylineInfo'  #can get link of brand and name of brand from the a-link
 product_name_class = 'productTitle' #span
 rating_class = 'a-icon-alt'  #span
@@ -40,6 +40,17 @@ rating = soup.find_all('span',{'class':rating_class})
 no_of_rat = soup.find_all('span',{'id':no_of_rat_class})
 actual_price = soup.find_all('span',{'class':actual_price_class})
 selling_price = soup.find_all('span',{'id':sell_price_id})
+
+image_urls = []
+
+for image in image_list:
+	try:
+		image_url = image.find('img').get('src')
+		print(image_url)
+		image_urls.append(image_url)
+	except:
+		# print('NoneType Object in soup')
+		pass
 
 print(brand_name[0].text.strip())
 print(product_name[0].text.strip())
