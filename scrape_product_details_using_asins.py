@@ -15,46 +15,55 @@ asins_df = pd.read_csv('ASINs.csv')
 asin_list = asins_df['ASIN']
 # print(asin_list)
 
-# for asin in asin_list:
-# 	url = "https://www.amazon.in/dp/" + str(asin)
-# 	html = requests.get(url,headers=headers_std).text
-# 	soup = BeautifulSoup(html,'lxml')
-
-# url = "https://www.amazon.in/dp/B014G69R1Q"
-# html = requests.get(url,headers=headers_std).text
-# soup = BeautifulSoup(html,'lxml')
-
 image_list_span_class = 'a-button-text' #span containing the img tag
 brand_name_class = 'bylineInfo'  #can get link of brand and name of brand from the a-link
 product_name_class = 'productTitle' #span
 rating_class = 'a-icon-alt'  #span
 no_of_rat_class = 'acrCustomerReviewText' #span
-actual_price_class = 'priceBlockStrikePriceString'
+# actual_price_class = 'priceBlockStrikePriceString'   # this discounted price is not presernt for all
 sell_price_id = 'priceblock_saleprice'
+sell_price_range_id = 'priceblock_ourprice'
 
-#scrape the product details
-image_list = soup.find_all('span',{'class':image_list_span_class})
-brand_name = soup.find_all('a',{'id':brand_name_class})
-product_name = soup.find_all('span',{'id':product_name_class})
-rating = soup.find_all('span',{'class':rating_class})
-no_of_rat = soup.find_all('span',{'id':no_of_rat_class})
-actual_price = soup.find_all('span',{'class':actual_price_class})
-selling_price = soup.find_all('span',{'id':sell_price_id})
+for asin in asin_list:
+	url = "https://www.amazon.in/dp/" + str(asin)
+	html = requests.get(url,headers=headers_std).text
+	soup = BeautifulSoup(html,'lxml')
 
-image_urls = []
+	#scrape the product details
+	image_list = soup.find_all('span',{'class':image_list_span_class})
+	brand_name = soup.find_all('a',{'id':brand_name_class})
+	product_name = soup.find_all('span',{'id':product_name_class})
+	rating = soup.find_all('span',{'class':rating_class})
+	no_of_rat = soup.find_all('span',{'id':no_of_rat_class})
+	actual_price = soup.find_all('span',{'class':actual_price_class})
+	selling_price = soup.find_all('span',{'id':sell_price_id})
+	sell_price_range = soup.find('span',{'id':sell_price_range_id})
 
-for image in image_list:
+	image_urls = []
+
+	for image in image_list:
+		try:
+			image_url = image.find('img').get('src')
+			print(image_url)
+			image_urls.append(image_url)
+		except:
+			# print('NoneType Object in soup')
+			pass
+
+	# will use assert statements here later instead of print and along with error statement, will append a blank string
 	try:
-		image_url = image.find('img').get('src')
-		print(image_url)
-		image_urls.append(image_url)
-	except:
-		# print('NoneType Object in soup')
-		pass
+		print(brand_name[0].text.strip())			# for some products brand_name is not present so try except is useful here
 
-print(brand_name[0].text.strip())
-print(product_name[0].text.strip())
-print(rating[0].text.strip())
-print(no_of_rat[0].text.strip())
-print(actual_price[0].text.strip())
-print(selling_price[0].text.strip())
+	except:
+		print('brand_name problem')
+
+	print(product_name[0].text.strip())
+	print(rating[0].text.strip())
+	print(no_of_rat[0].text.strip())
+
+	try:
+		print(sell_price_range.text.strip())
+		
+	except:
+		print(url)
+		print('Problem here')
