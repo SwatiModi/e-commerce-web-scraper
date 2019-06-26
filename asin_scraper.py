@@ -9,7 +9,8 @@ headers_std = {
 'Content-Type': 'text/html',
 }
 
-url = "https://www.amazon.in/Casual-Shoes-50-Off-or-more/s?rh=n%3A9780814031%2Cp_n_pct-off-with-tax%3A2665401031"
+# url = "https://www.amazon.in/Casual-Shoes-50-Off-or-more/s?rh=n%3A9780814031%2Cp_n_pct-off-with-tax%3A2665401031"
+url = input('URL for scraping : ')
 html = requests.get(url,headers=headers_std).text
 soup = BeautifulSoup(html,'lxml')
 
