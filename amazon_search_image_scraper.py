@@ -6,12 +6,18 @@ import os
 # add argument parser for passing the target folder for saving the images
 parser = argparse.ArgumentParser()
 parser.add_argument('--saveto', help='Target directory to save the Images (default: images/', action='store', dest='dirName')
+parser.add_argument('--pages', help='No. of pages (default: 40/', action='store', dest='last_pagination')
 args = parser.parse_args()
 
 if(args.dirName):
-    dirName = str(args.dirName)
+    dirName = str(args.dirName) + '/'
 else :
     dirName = 'images/'
+
+if(args.last_pagination):
+    last_pagination = int(args.last_pagination) + 1
+else :
+    last_pagination = 40
 
 if not os.path.exists(dirName):
     os.mkdir(dirName)
@@ -24,10 +30,6 @@ headers_std = {
 link = input('Search Query URL: ')
 req = requests.get(link)
 soup = BeautifulSoup(req.text, 'lxml')
-
-pagination = soup.find_all('span', {'class': 'pagnDisabled'})
-
-last_pagination = int(pagination[0].get_text()) + 1
 
 urls = []
 
