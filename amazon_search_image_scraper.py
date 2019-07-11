@@ -1,5 +1,20 @@
 import requests
 from bs4 import *
+import argparse
+import os
+
+# add argument parser for passing the target folder for saving the images
+parser = argparse.ArgumentParser()
+parser.add_argument('--saveto', help='Target directory to save the Images (default: images/', action='store', dest='dirName')
+args = parser.parse_args()
+
+if(args.dirName):
+    dirName = str(args.dirName)
+else :
+    dirName = 'images/'
+
+if not os.path.exists(dirName):
+    os.mkdir(dirName)
 
 headers_std = {
 'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36',
@@ -30,7 +45,7 @@ for x in urls:
     for i in imgs:
         if str(i).find('src') != -1:
             url = i['src']
-            name_image_folder = 'images/' + str(k) + '.jpg'
+            name_image_folder = dirName + str(k) + '.jpg'
             image = requests.get(url).content
             
             with open(name_image_folder, 'wb') as handler:
